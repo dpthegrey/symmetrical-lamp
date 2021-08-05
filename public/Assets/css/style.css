@@ -1,0 +1,49 @@
+body {
+  font-family: Roboto, lato, sans-serif !important;
+  font-size: large;
+}
+ui {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.logo {
+  height: 43px;
+}
+
+.navbar-brand {
+  font-size: 1.5em;
+  padding-left: 10px;
+  font-family: "Lato";
+}
+.nav-item a {
+  color: grey !important;
+  font-size: 16px;
+  padding: 0 10px;
+  font-weight: 600;
+}
+.display-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+li.nav-item {
+  padding: 0 10px;
+}
+.signin-image {
+  height: 390px;
+  border: 25px solid white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px grey;
+  margin-top: 10px;
+}
+textarea:focus,
+input:focus {
+  outline: none !important;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.jumbotron {
+  background-color: white;
+}
