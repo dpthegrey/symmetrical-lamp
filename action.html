@@ -44,13 +44,20 @@
         </li>
         <li class="nav-item">
           <button
-            class="btn btn-outline-secondary btn-lg text-info font-weight-bold"
+            class="
+              btn btn-outline-secondary btn-lg
+              text-info
+              font-weight-bold
+              join-meeting
+            "
           >
             Join the meeting
           </button>
         </li>
         <li class="nav-item">
-          <button class="btn btn-lg btn-info text-light font-weight-bold">
+          <button
+            class="btn btn-lg btn-info text-light font-weight-bold new-meeting"
+          >
             Start a meeting
           </button>
         </li>
@@ -69,7 +76,13 @@
           <ul class="display-center justify-content-start">
             <li style="padding: 0">
               <button
-                class="btn btn-lg text-light font-weight-bold display-center"
+                class="
+                  btn btn-lg
+                  text-light
+                  font-weight-bold
+                  display-center
+                  new-meeting
+                "
                 style="background-color: #01796b"
               >
                 <span class="material-icons mr-2">video_call</span>New Meeting
@@ -90,10 +103,15 @@
                   type="text"
                   placeholder="Enter a code"
                   style="border: none"
+                  class="enter-code"
                 />
               </button>
             </li>
-            <li class="text-dark font-weight-bold cursor-pointer pl-2">Join</li>
+            <li
+              class="text-dark font-weight-bold cursor-pointer pl-2 join-action"
+            >
+              Join
+            </li>
           </ul>
         </div>
         <div class="container w-50">
@@ -110,5 +128,24 @@
         Learn more about <span class="learn-more text-info">google meet</span> .
       </h6>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(function () {
+        $(document).on("click", ".join-meeting", function () {
+          $(".enter-code").focus(); // focus the input field
+        });
+        $(document).on("click", ".join-action", function () {
+          var join_value = $(".enter-code").val();
+          var meetingUrl = window.location.origin + "?meetingID=" + join_value;
+          window.location.replace(meetingUrl);
+        });
+        $(document).on("click", ".new-meeting", function () {
+          var eight_d_value = Math.floor(Math.random() * 100000000 + 1);
+          var meetingUrl =
+            window.location.origin + "?meetingID=" + eight_d_value;
+          window.location.replace(meetingUrl);
+        });
+      });
+    </script>
   </body>
 </html>
