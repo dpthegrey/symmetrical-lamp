@@ -1,4 +1,4 @@
-var MyApp = (function () {
+let MyApp = (function () {
   function init(uid, mid) {
     alert("From " + uid + " to " + mid);
   }
