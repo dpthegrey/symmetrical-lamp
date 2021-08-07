@@ -107,9 +107,12 @@ input:focus {
   border: 1px solid lightgrey;
   border-radius: 50%;
 }
+/*
 .action-icon-style span.material-icons {
-  /* font-size: 18px; */
+  font-size: 18px;
 }
+*/
+
 .end-call-wrap {
   -ms-transform: rotate(135deg);
   transform: rotate(135deg);

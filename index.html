@@ -15,6 +15,23 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="public/Assets/css/style.css" />
+    <script src="public/Assets/js/jquery-3.4.1.min.js"></script>
+    <script src="public/Assets/js/app.js"></script>
+    <script>
+      $(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        var meeting_id = urlParams.get("meetingID");
+        user_id = window.prompt("Enter your userid");
+        if (!user_id || !meeting_id) {
+          alert("User id or meeting id missing");
+          window.location.href = "/action.html";
+          return;
+        }
+        $("#meetingContainer").show();
+
+        MyApp._init(user_id, meeting_id);
+      });
+    </script>
   </head>
   <body>
     <main class="d-flex flex-column home-wrap">
