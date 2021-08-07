@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="public/Assets/css/style.css" />
   </head>
   <body>
-    <main class="container-fluid d-flex flex-column home-wrap">
+    <main class="d-flex flex-column home-wrap">
       <div class="g-top text-light">
         <div class="top-remote-video-show-wrap d-flex">
           <div id="meetingContainer" class="w-75 d-none">
@@ -65,7 +65,7 @@
             <div class="top-left-participant-icon">
               <span class="material-icons">people</span>
             </div>
-            <div class="top-left-participant-count"></div>
+            <div class="top-left-participant-count">2</div>
           </div>
           <div class="top-left-chat-wrap pt-2 cursor-pointer">
             <span class="material-icons">message</span>
@@ -89,7 +89,10 @@
             <span class="material-icons">keyboard_arrow_down</span>
           </div>
         </div>
-        <div class="bottom-middle">
+        <div
+          class="bottom-middle d-flex justify-content-center align-items-center"
+          style="height: 10vh"
+        >
           <div
             class="
               mic-toggle-wrap
@@ -146,8 +149,8 @@
             "
           >
             <span class="material-icons">present_to_all</span>
+            <div>Present Now</div>
           </div>
-          <div>Present Now</div>
           <div
             class="option-wrap cursor-pointer display-center"
             style="height: 10vh; position: relative"
