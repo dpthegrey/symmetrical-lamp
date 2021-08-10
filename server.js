@@ -31,4 +31,12 @@ io.on("connection", (socket) => {
         };
     });
   });
+
+  // when the client emits 'add_user', this listens and executes
+  socket.on("SDPProcess", (data) => {
+    socket.to(data.to_connId).emit("SDPProcess", {
+      message: data.message,
+      from_connId: socket.id,
+    });
+  });
 });
