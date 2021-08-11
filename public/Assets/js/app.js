@@ -6,7 +6,7 @@ let AppProcess = (function () {
 
   let serverProcess;
   // We are taking SDP_function & my_connId from MyApp on socket connection
-  function _init(SDP_function, my_connId) {
+  async function _init(SDP_function, my_connId) {
     serverProcess = SDP_function;
     my_connection_id = my_connId;
   }
@@ -28,7 +28,8 @@ let AppProcess = (function () {
     ],
   };
 
-  function setConnection(connId) {
+  // We are taking SDP_function & my_connId from MyApp on socket connection
+  async function setConnection(connId) {
     let connection = new RTCPeerConnection(iceConfiguration);
 
     connection.onnegotiationneeded = async function (event) {
@@ -86,7 +87,8 @@ let AppProcess = (function () {
     return connection;
   }
 
-  function setOffer(connId) {
+  // This function will be called when socket connection is made
+  async function setOffer(connId) {
     // Get connection from array and store it in the variable
     let connection = peers_connection[connId];
     // Create offer
@@ -107,14 +109,61 @@ let AppProcess = (function () {
     );
   }
 
+  // This function will be called when other user will send
+  async function SDPProcess(message, from_connId) {
+    message = JSON.parse(message);
+    // receive answer from other user
+    if (message.answer) {
+      // Set the answer as remote description for that sender
+      await peers_connection[from_connId].setRemoteDescription(
+        new RTCSessionDescription(message.answer)
+      );
+    } else if (message.offer) {
+      // Check if the offer is in the peer connection or not
+      if (!peers_connection[from_connId]) {
+        // If connection is not created then create it
+        await setConnection(from_connId);
+      }
+      // Set remote description using received offer
+      await peers_connection[from_connId].setRemoteDescription(
+        new RTCSessionDescription(message.offer)
+      );
+      // Create answer on behalf of this offer
+      let answer = await peers_connection[from_connId].createAnswer();
+      // Set answer for other user's local description
+      await peers_connection[from_connId].setLocalDescription(answer);
+      // Send answer to peer
+      serverProcess(
+        JSON.stringify({
+          // sending answer property to whom we got the offer by returning it
+          answer: answer,
+        }),
+        from_connId
+      );
+    } else if (message.icecandidate) {
+      if (!peers_connection[from_connId]) {
+        await setConnection(from_connId);
+      }
+      try {
+        await peers_connection[from_connId].addIceCandidate(
+          message.icecandidate
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+
   return {
+    // This function will be called when socket connection is made
     setNewConnection: async function (connId) {
       await setConnection(connId);
     },
     init: async function (SDP_function, my_connId) {
       await _init(SDP_function, my_connId);
     },
-    processClientFunc: async function (SDP_function, my_connId) {
+    //
+    processClientFunc: async function (data, from_connId) {
       await SDPProcess(data, from_connId);
     },
   };
