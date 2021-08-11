@@ -3,13 +3,71 @@ let AppProcess = (function () {
   let peers_connection = []; // Array of connections of peers
   let remote_vid_stream = []; // Array of remote video stream
   let remote_aud_stream = []; // Array of remote audio stream
+  let local_div; // Local video container
+  let serverProcess; // Server process
+  let audio; // Audio element
+  let isAudioMute = true; // Mute or unmute audio
+  let rtp_audio_senders = []; // Array of RTP audio senders
+  let video_states = {
+    None: 0,
+    Camera: 1,
+    ScreenShare: 2,
+  };
+  let video_st = video_states.None; // Initialise video state to None
 
   let serverProcess;
   // We are taking SDP_function & my_connId from MyApp on socket connection
   async function _init(SDP_function, my_connId) {
     serverProcess = SDP_function;
     my_connection_id = my_connId;
+    // This eventProcess will handle audio and video for our app
+    eventProcess();
+    // Store local div player
+    local_div = document.getElementById("localVideoPlayer");
   }
+  function eventProcess() {
+    $("#micMuteUnmute").on("click", async function () {
+      if (!audio) {
+        await loadAudio();
+      }
+      if (!audio) {
+        alert("Audio permission has not granted");
+        return;
+      }
+      if (isAudioMute) {
+        // Unmute audio
+        audio.enabled = true;
+        $(this).html(`<span class="material-icons">mic</span>`);
+        updateMediaSenders(audio, rtp_audio_senders);
+      } else {
+        // Mute audio
+        audio.enabled = false;
+        $(this).html(`<span class="material-icons">mic-off</span>`);
+        removeMediaSenders(rtp_audio_senders);
+      }
+      // Update isAudioMute to false if already true or true if already false
+      isAudioMute = !isAudioMute;
+    });
+    $("#videoCamOnOff").on("click", async function () {
+      // If video state is Camera, then turn off
+      if (video_st == video_states.Camera) {
+        await videoProcess(video_states.None);
+      } else {
+        // If video state is not Camera, then turn on
+        await videoProcess(video_states.Camera);
+      }
+    });
+    $("#ScreenShareOnOff").on("click", async function () {
+      // If video state is ScreenShare, then turn off
+      if (video_st == video_states.ScreenShare) {
+        await videoProcess(video_states.None);
+      } else {
+        // If video state is not ScreenShare, then turn on
+        await videoProcess(video_states.ScreenShare);
+      }
+    });
+  }
+
   let iceConfiguration = {
     iceServers: [
       {
