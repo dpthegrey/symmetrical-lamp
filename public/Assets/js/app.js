@@ -15,6 +15,7 @@ let AppProcess = (function () {
   };
   let video_st = video_states.None; // Initialise video state to None
   let videoCamTrack; // Video camera track
+  let rtp_vid_senders = []; // Array of RTP video senders
   // We are taking SDP_function & my_connId from MyApp on socket connection
   async function _init(SDP_function, my_connId) {
     serverProcess = SDP_function;
@@ -179,6 +180,12 @@ let AppProcess = (function () {
     peers_connection_ids[connId] = connId; // Add connection id to array
     peers_connection[connId] = connection; // Add connection to array
 
+    if (
+      video_st == video_states.Camera ||
+      video_st == video_states.ScreenShare
+    ) {
+      updateMediaSenders(videoCamTrack, rtp_vid_senders);
+    }
     return connection;
   }
 
@@ -271,6 +278,12 @@ let MyApp = (function () {
   function init(uid, mid) {
     user_id = uid;
     meeting_id = mid;
+    // show video in div
+    $("#meetingContainer").show();
+    // show username
+    $("#me h2").text(`${user_id} (Me)`);
+    // Set user's name in title area
+    document.title = user_id;
     event_process_for_signaling_server();
   }
   function event_process_for_signaling_server() {

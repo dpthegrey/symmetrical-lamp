@@ -1,5 +1,5 @@
 body {
-  font-family: Roboto, lato, sans-serif !important;
+  font-family: robot, lato !important;
   font-size: large;
 }
 ul {
@@ -10,14 +10,13 @@ ul {
 .logo {
   height: 43px;
 }
-
 .navbar-brand {
-  font-size: 1.5em;
+  font-size: 27px;
   padding-left: 10px;
   font-family: "Lato";
 }
 .nav-item a {
-  color: grey !important;
+  color: gray !important;
   font-size: 16px;
   padding: 0 10px;
   font-weight: 600;
@@ -34,8 +33,7 @@ li.nav-item {
   height: 390px;
   border: 25px solid white;
   border-radius: 5px;
-  box-shadow: 1px 1px 1px grey;
-  margin-top: 10px;
+  box-shadow: 1px 1px 5px grey;
 }
 textarea:focus,
 input:focus {
@@ -48,7 +46,7 @@ input:focus {
   background-color: white;
 }
 
-/* --------------- index page --------------- */
+/*.......... index page........... */
 .home-wrap {
   background-color: rgb(31, 30, 30);
 }
@@ -104,16 +102,64 @@ input:focus {
   font-size: 8px !important;
   height: 40px;
   width: 40px;
-  border: 1px solid lightgrey;
+  border: 1px solid lightgray;
   border-radius: 50%;
 }
-/*
 .action-icon-style span.material-icons {
-  font-size: 18px;
+  /* font-size: 18px; */
 }
-*/
-
 .end-call-wrap {
   -ms-transform: rotate(135deg);
   transform: rotate(135deg);
+}
+.top-remote-video-show-wrap {
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  /* background-image: url(../images/bg.png) !important; */
+}
+video {
+  border: 1px solid gray;
+  width: 300px;
+}
+.active {
+  background-color: #00808047;
+  border-radius: 5px;
+}
+.top-box {
+  background-color: rgb(14 6 6);
+  position: fixed;
+  width: 30%;
+  height: 30%;
+  top: 20.5%;
+  left: 35.5%;
+  display: block;
+  box-shadow: 0 0 5px white;
+  border-radius: 10px;
+  z-index: 999;
+  columns: white;
+  border: 2px solid white;
+}
+.bottom-left {
+  position: relative;
+  padding: 5px;
+}
+.g-details {
+  position: absolute;
+  width: 30vw;
+  background-color: white;
+  margin-top: -135px;
+  counter-reset: black;
+  border-radius: 5px;
+  padding: 5px;
+}
+.g-details-heading-show {
+  font-size: 14px;
+  padding-left: 10px;
+}
+.recording-show {
+  position: absolute;
+  margin-bottom: 132px;
+  display: none;
 }
