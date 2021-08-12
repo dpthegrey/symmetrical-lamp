@@ -15,7 +15,6 @@ let AppProcess = (function () {
   };
   let video_st = video_states.None; // Initialise video state to None
   let videoCamTrack; // Video camera track
-  let serverProcess;
   // We are taking SDP_function & my_connId from MyApp on socket connection
   async function _init(SDP_function, my_connId) {
     serverProcess = SDP_function;
@@ -91,11 +90,12 @@ let AppProcess = (function () {
       }
       if (vstream && vstream.getVideoTracks().length > 0) {
         // Get the exact video track from vstream and store it in videoCamTrack
-        videoCamTrack = vstream.getVideoTrack()[0];
+        videoCamTrack = vstream.getVideoTracks()[0];
         // Load this tracks as source object for local div
         if (videoCamTrack) {
           // Set the video stream to local div
           local_div.srcObject = new MediaStream([videoCamTrack]);
+          alert("Video stream is loaded");
         }
       }
     } catch (e) {
