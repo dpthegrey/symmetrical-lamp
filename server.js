@@ -9,26 +9,27 @@ const io = require("socket.io")(server, {
   allowEIO3: true, // false by default
 });
 app.use(express.static(path.join(__dirname, "")));
-var userConnection = [];
+let userConnections = [];
 io.on("connection", (socket) => {
   console.log("your unique socket id is: " + socket.id);
   socket.on("userconnect", (data) => {
     console.log("user connected: ", data.displayName, data.meetingID);
-    var other_users = userConnection.filter(
+    let other_users = userConnections.filter(
       (p) => p.meeting_id == data.meetingID
     );
-    userConnection.push({
+    userConnections.push({
       connectionId: socket.id,
       user_id: data.displayName,
       meeting_id: data.meetingID,
     });
-
+    let userCount = userConnections.length;
+    console.log(userCount);
     other_users.forEach((v) => {
-      socket.to(v.connectionId).emit("inform_others_about_me"),
-        {
-          other_user_id: data.displayName,
-          connId: socket.id,
-        };
+      socket.to(v.connectionId).emit("inform_others_about_me", {
+        other_user_id: data.displayName,
+        connId: socket.id,
+        userNumber: userCount,
+      });
     });
     socket.emit("inform_me_about_other_user", other_users);
   });

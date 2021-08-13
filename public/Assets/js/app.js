@@ -67,7 +67,29 @@ let AppProcess = (function () {
       }
     });
   }
-
+  function connection_status(connection) {
+    if (
+      connection &&
+      (connection.connectionState == "new" ||
+        connection.connectionState == "connecting" ||
+        connection.connectionState == "connected")
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  async function updateMediaSenders(track, rtp_senders) {
+    for (var con_id in peers_connection_ids) {
+      if (connection_status(peers_connection[con_id])) {
+        if (rtp_senders[con_id] && rtp_senders[con_id].track) {
+          rtp_senders[con_id].replaceTrack(track);
+        } else {
+          rtp_senders[con_id] = peers_connection[con_id].addTrack(track);
+        }
+      }
+    }
+  }
   async function videoProcess(newVideoState) {
     try {
       let vstream = null;
@@ -313,7 +335,7 @@ let MyApp = (function () {
     socket.on("inform_others_about_me", (data) => {
       //console.log("inform_others_about_me");
       //console.log(data);
-      addUser(data.other_user_id, data.connId);
+      addUser(data.other_user_id, data.connId, data.userNumber);
       AppProcess.setNewConnection(data.connId);
     });
     socket.on("inform_me_about_other_user", function (other_users) {
